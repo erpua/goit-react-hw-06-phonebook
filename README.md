@@ -1,70 +1,147 @@
-# Getting Started with Create React App
+---
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+- !! this.setState => compiles after all sync code is finished
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+INSTALLATIONS:
 
-### `npm start`
+BASE
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- git clone repo
+- cd cloned repo
+- npx create-react-app .
+- ( optional ) npm install react-scripts@latest
+- folder public delete all except index.html =>
+- in index.html => delete =>
+  <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+- folder src => delete all except index.js and App.js and - clear extra imports
+  and unused files in index.js and App.js
+- import React from 'react' in App.js and each component file
+- npm install --save-dev prop-types
+- npm install --save-dev modern-normalize (in index.js => import
+  'modern-normalize/modern-normalize.css')
+- npm install --save-dev prettier
+- create file in project root .prettierrc.json => { "printWidth": 80,
+  "tabWidth": 2, "useTabs": false, "semi": true, "singleQuote": true,
+  "trailingComma": "all", "bracketSpacing": true, "jsxBracketSameLine": false,
+  "arrowParens": "avoid", "proseWrap": "always" }
+- npm install --save-dev husky@4.3.7
+- create file in project root .huskyrc: : { "hooks": { "pre-commit":
+  "lint-staged" } }
+- npm install --save-dev lint-staged@9.4.2
+- create file in project root .lintstagedrc: { "src/**/\*.{json,css,scss,md}":
+  ["prettier --write"], "src/**/\*.{js,jsx,ts,tsx}": ["prettier --write",
+  "eslint --fix"] }
+- npm start
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+ADDITIONAL
 
-### `npm test`
+- npm install --save-dev axios
+- npm install --save-dev react-router-dom
+- npm install --save-dev react-loader-spinner
+- in folder src create file routes.js =>
+<!--
+export default {
+  HOME_PAGE: '/',
+  MOVIES_PAGE: '/movies',
+  MOVIE_DETAILS_PAGE: '/movies/:movieId',
+  CASTS: '/movies/:movieId/cast',
+  REVIEWS: '/movies/:movieId/reviews',
+};
+-->
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `npm run build`
+JSON Server:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- npm install json-server => into project;
+  https://github.com/typicode/json-server
+- in package.json => in scripts add => "api-server": "json-server --watch
+  db.json";
+- for delaying => api-server": "json-server --delay 200 --watch db.json"
+- npm start api-server
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+---
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+START NPM ( for development ):
 
-### `npm run eject`
+- npm start => will serve at another port
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+---
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+DEPLOY AT NETLIFY
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+- npm install netlify-cli -g
+- in porject route create file ntelify.toml =>
+<!-- 
+[build]
+publish= "build" >>> for production build
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+[[redirects]] from="/\*" to="/index.html" status = 200 >>> for single web app
+hosting -->
 
-## Learn More
+- netlify login => will open browser with authorization link ( in terminal must
+  be => You are now logged into your Netlify account!)
+- in package.json => in scripts => predeploy": "npm run build", "deploy":
+  "netlify deploy -p" ( value homepage if it is, should be deleted )
+- npm run deploy => Create & configure a new site => myname's team ENTER => Site
+  name => uniq => ENTER => in Website URL / Live URL => our link
+- netlify open --site
+- delete folder .netlify
+- git add . / commit / push
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+DEPLOY AT GITHUB
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- npm install --save-dev gh-pages
+- in package.json => - scripts => "homepage":
+  "https://myusername.github.io/my-app"add to package.json => change to
+  =>"homepage": "https://erpua.github.io/goit-react-hw-04-movies";
+- in package.json => add scripts: "predeploy": "npm run build", "deploy":
+  "gh-pages -d build" => "scripts": { "start": "react-scripts start", "build":
+  "react-scripts build", "test": "react-scripts test", "eject": "react-scripts
+  eject", "predeploy": "npm run build", "deploy": "gh-pages -d build" },
+- git add . / commit / push
+- npm run deploy
+- add repository root to GitHub Website link
 
-### Code Splitting
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+EXTRAS:
 
-### Analyzing the Bundle Size
+- Component Suspense together with lazy wrap code to download what it needs by
+  that time
+- In PureComponent => method shouldComponentUpdate is automatic underground
+- NavLink has more styles then Link
+- export default withRouter(Component) => it wrappes our component in the other
+  component and passes props: history, location, match
+- emoji: <span role="img" aria-label="face emoji"> 🤓 </span>
+- Optional chaining (?.) =>
+<!-- {
+   const adventurer = { 
+  name: 'Alice', 
+  cat: { name:
+  'Dinah', }, 
+  }; console.log('object adventurer=> ', adventurer);
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+const dogName = adventurer.dog?.name; console.log('const dogName =
+adventurer.dog?.name =>', dogName); // expected output: undefined
 
-### Making a Progressive Web App
+console.log( 'adventurer.dog?.name || does not exist =>', adventurer.dog?.name
+|| 'this value " name " of property dog - does not exist', ); // expected
+output: undefined
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+console.log( 'adventurer.someNonExistentMethod?.() =>',
+adventurer.someNonExistentMethod?.(), ); // expected output: undefined } -->
 
-### Advanced Configuration
+Back-end:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+Inner property => embed:
 
-### Deployment
+<!-- - => localhost:4040/authors => will receive authors -->
+<!-- - => localhost:4040/authors?_embed=books => will receive each author with his books -->
+<!-- - => localhost:4040/authors/2?_embed=books => will receive author with id=2 and all his books -->
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+Inner property => expand:
 
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+<!-- - => localhost:4040/books/2?_expand=author => will receive all books and each has its' author -->
