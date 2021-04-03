@@ -39,6 +39,20 @@ ADDITIONAL
 
 - npm install --save-dev sass
 - create .env=> SASS_PATH=src
+- npm install --save-dev uuid
+- npm install --save-dev redux
+- npm install --save-dev react-redux ( to contact our react component with redux
+  library ). Has <Provider /> component, that wraps ALL our application and,
+  throuth context, passes additional functionality ( <React.StrictMode>
+  <Provider store={store}> <App /> </Provider> </React.StrictMode>)
+- DEVTOOLS
+- http://extension.remotedev.io/ => docs
+- https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd
+  => REDUX DEVTOOLS
+- npm install --save-dev redux-devtools-extension
+- in store.js => import { composeWithDevTools } from 'redux-devtools-extension';
+- npm install --save-dev @reduxjs/toolkit
+- npm install --save-dev redux-logger
 
 DEPLOY AT GITHUB
 

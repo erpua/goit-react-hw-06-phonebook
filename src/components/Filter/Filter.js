@@ -1,62 +1,45 @@
-import React, { Component } from 'react';
-
-import PropTypes from 'prop-types';
-
+import React from 'react';
+import ContactListItem from '../ContactListItem';
+import { connect } from 'react-redux';
+import { formFilter } from '../../redux/contacts/contactsActions';
 import styles from './Filter.module.scss';
 
-class Filter extends Component {
-  static propTypes = {
-    value: PropTypes.string.isRequired,
-    onChange: PropTypes.func.isRequired,
-    visibleSearchContacts: PropTypes.arrayOf(
-      PropTypes.exact({
-        name: PropTypes.string.isRequired,
-        number: PropTypes.string.isRequired,
-        id: PropTypes.string.isRequired,
-      }),
-    ),
-    contacts: PropTypes.arrayOf(
-      PropTypes.exact({
-        name: PropTypes.string.isRequired,
-        number: PropTypes.string.isRequired,
-        id: PropTypes.string.isRequired,
-      }),
-    ),
-    onDeleteContact: PropTypes.func.isRequired,
+const Filter = ({ value, onChange, contacts }) => {
+  return (
+    <section className={styles.main__form}>
+      <label className={styles.form__label}>
+        Find contacts by name
+        <input
+          className={styles.form__input}
+          type="name"
+          value={value}
+          onChange={e => onChange(e.target.value)}
+        />
+      </label>
+      <ul>
+        {contacts.length > 1 &&
+          contacts.map(({ id }) => <ContactListItem key={id} id={id} />)}
+      </ul>
+    </section>
+  );
+};
+
+const mapStateToProps = state => {
+  const { items, filter } = state.contacts;
+  const normalizedFilter = filter.toLowerCase();
+
+  const getVisibleContact = items.filter(contact =>
+    contact.name.toLowerCase().includes(normalizedFilter),
+  );
+
+  return {
+    contacts: getVisibleContact,
+    value: state.contacts.filter,
   };
+};
 
-  render() {
-    return (
-      <section className={styles.main__form}>
-        <label className={styles.form__label}>
-          Find contacts by name
-          <input
-            className={styles.form__input}
-            type="name"
-            value={this.props.value}
-            onChange={e => this.props.onChange(e.target.value)}
-          />
-        </label>
-        <ul>
-          {this.props.contacts.length > 2 &&
-            this.props.visibleSearchContacts.map(({ id, name, number }) => (
-              <li key={id} className={styles.contactsListItem}>
-                <p>
-                  {name}: {number}
-                </p>
-                <button
-                  type="button"
-                  className={styles.deleteButton}
-                  onClick={() => this.props.onDeleteContact(id)}
-                >
-                  Delete
-                </button>
-              </li>
-            ))}
-        </ul>
-      </section>
-    );
-  }
-}
+const mapDispatchToProps = {
+  onChange: formFilter,
+};
 
-export default Filter;
+export default connect(mapStateToProps, mapDispatchToProps)(Filter);

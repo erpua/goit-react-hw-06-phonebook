@@ -1,42 +1,39 @@
-import React, { Component } from 'react';
-
+import React from 'react';
 import PropTypes from 'prop-types';
+import ContactListItem from '../ContactListItem/ContactListItem';
+import { connect } from 'react-redux';
 
-import styles from './ContactList.module.scss';
+const ContactList = ({ contacts }) => {
+  return (
+    <ul>
+      {contacts.map(({ id }) => (
+        <ContactListItem key={id} id={id} />
+      ))}
+    </ul>
+  );
+};
 
-class ContactList extends Component {
-  static propTypes = {
-    contacts: PropTypes.arrayOf(
-      PropTypes.exact({
-        name: PropTypes.string.isRequired,
-        number: PropTypes.string.isRequired,
-        id: PropTypes.string.isRequired,
-      }),
-    ),
-    onDeleteContact: PropTypes.func.isRequired,
+ContactList.propTypes = {
+  contacts: PropTypes.arrayOf(
+    PropTypes.exact({
+      name: PropTypes.string.isRequired,
+      number: PropTypes.string.isRequired,
+      id: PropTypes.string.isRequired,
+    }),
+  ),
+};
+
+const mapStateToProps = state => {
+  const { items, filter } = state.contacts;
+  const normalizedFilter = filter.toLowerCase();
+
+  const getVisibleContact = items.filter(contact =>
+    contact.name.toLowerCase().includes(normalizedFilter),
+  );
+
+  return {
+    contacts: getVisibleContact,
   };
+};
 
-  render() {
-    return (
-      // <ul className={styles.form}>
-      <ul>
-        {this.props.contacts.map(({ id, name, number }) => (
-          <li key={id} className={styles.contactsListItem}>
-            <p>
-              {name}: {number}
-            </p>
-            <button
-              type="button"
-              className={styles.deleteButton}
-              onClick={() => this.props.onDeleteContact(id)}
-            >
-              Delete
-            </button>
-          </li>
-        ))}
-      </ul>
-    );
-  }
-}
-
-export default ContactList;
+export default connect(mapStateToProps)(ContactList);

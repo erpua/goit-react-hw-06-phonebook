@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-
+import { connect } from 'react-redux';
+import { addContact } from '../../redux/contacts/contactsActions';
 import PropTypes from 'prop-types';
-
 import styles from './ContactForm.module.scss';
 
 class ContactForm extends Component {
@@ -22,12 +22,20 @@ class ContactForm extends Component {
   handleSubmit = e => {
     e.preventDefault();
     const { name, number } = this.state;
+    const findContact = this.props.contacts.find(
+      contact => contact.name === name,
+    );
+    if (findContact) {
+      alert(`${findContact.name} is already in contacts`);
+      return;
+    }
     this.props.onAddContact(name, number);
     this.setState({ name: '', number: '' });
   };
 
   render() {
     const { name, number } = this.state;
+
     return (
       <form className={styles.main__form} onSubmit={this.handleSubmit}>
         <label className={styles.form__label}>
@@ -58,4 +66,12 @@ class ContactForm extends Component {
   }
 }
 
-export default ContactForm;
+const mapStateToProps = state => ({
+  contacts: state.contacts.items,
+});
+
+const mapDispatchToProps = {
+  onAddContact: addContact,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ContactForm);
